@@ -20,18 +20,18 @@ import java.util.Map;
  * Created by hangjie.lou on 2017/8/20.
  */
 public class XStreamUtil {
-    public static <T> T  toBean(String xmlStr,Class<T> cls){
+    public static <T> T toBean(String xmlStr, Class<T> cls) {
         //注意：不是new Xstream(); 否则报错：java.lang.NoClassDefFoundError: org/xmlpull/v1/XmlPullParserFactory
-        XStream xstream=new XStream() {
+        XStream xstream = new XStream() {
             @Override
-            protected MapperWrapper wrapMapper(MapperWrapper next){
+            protected MapperWrapper wrapMapper(MapperWrapper next) {
                 return new MapperWrapper(next) {
                     @Override
-                    public boolean shouldSerializeMember(Class definedIn, String fieldName){
-                        if (definedIn == Object.class){
+                    public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+                        if (definedIn == Object.class) {
                             try {
                                 return this.realClass(fieldName) != null;
-                            } catch (Exception e){
+                            } catch (Exception e) {
                                 return false;
                             }
                         } else {
@@ -45,7 +45,7 @@ public class XStreamUtil {
         xstream.ignoreUnknownElements();
         //启用标签过滤
         xstream.processAnnotations(cls);
-        T obj=(T)xstream.fromXML(xmlStr);
+        T obj = (T) xstream.fromXML(xmlStr);
         return obj;
     }
 
@@ -62,8 +62,8 @@ public class XStreamUtil {
             matnrdtls.add(new MatnrdtlDto(m));
         }
         receiveMap.put("ASNMST", new AsnmstDto(asnData));
-        receiveMap.put("MATNRDTL",matnrdtls);
-        receiveMap.put("HUITEM",huitems);
+        receiveMap.put("MATNRDTL", matnrdtls);
+        receiveMap.put("HUITEM", huitems);
         String result = JSONObject.fromObject(receiveMap).toString();
         System.out.println(result);
     }
